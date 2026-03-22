@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY — Create Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700;800&family=Poppins:wght@500;600;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#F8F6F1;color:#111827;min-height:100vh;}
+:root{--teal:#0A4A4A;--teal2:#0D6060;--teal3:#E8F4F4;--saffron:#F59E0B;--saffron2:#D97706;--saffron-lt:#FEF3C7;--bg:#F8F6F1;--white:#FFFFFF;--navy:#111827;--body:#374151;--muted:#6B7280;--green:#065F46;--green-lt:#D1FAE5;--border:#E5E0D8;--red:#DC2626;--red-lt:#FEF2F2;}
+.page{min-height:100vh;display:grid;grid-template-columns:320px 1fr;}
+/* LEFT */
+.left{background:linear-gradient(150deg,#062E2E,#0A4A4A,#0D6060);padding:44px 36px;display:flex;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:100vh;overflow:hidden;}
+.left-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px;}
+.left::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);top:-80px;right:-80px;}
+.lc{position:relative;z-index:1;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;margin-bottom:40px;}
+.logo-txt{font-family:'Poppins',sans-serif;font-size:19px;font-weight:900;color:white;letter-spacing:2px;}
+.left-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:800;color:white;line-height:1.15;margin-bottom:10px;}
+.left-title span{color:var(--saffron);}
+.left-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.8;margin-bottom:32px;}
+/* PROGRESS */
+.prog{display:flex;flex-direction:column;gap:0;}
+.pi{display:flex;align-items:flex-start;gap:12px;padding-bottom:22px;position:relative;}
+.pi:last-child{padding-bottom:0;}
+.pi:not(:last-child)::after{content:'';position:absolute;left:13px;top:28px;bottom:0;width:2px;background:rgba(255,255,255,0.08);}
+.pi.done::after{background:rgba(245,158,11,0.25);}
+.pd{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-size:11px;font-weight:800;color:rgba(255,255,255,0.35);flex-shrink:0;transition:all .3s;background:rgba(255,255,255,0.04);}
+.pi.active .pd{background:var(--saffron);border-color:var(--saffron);color:var(--teal);}
+.pi.done .pd{background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.35);color:var(--saffron);}
+.pt{font-family:'Poppins',sans-serif;font-size:12.5px;font-weight:700;color:rgba(255,255,255,0.35);transition:all .3s;margin-top:4px;}
+.pi.active .pt{color:white;}
+.pi.done .pt{color:var(--saffron);}
+.ps{font-size:11px;color:rgba(255,255,255,0.25);margin-top:1px;}
+.lb{position:relative;z-index:1;}
+.tagline{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--saffron);opacity:0.7;}
+/* RIGHT */
+.right{background:var(--white);padding:48px 52px;overflow-y:auto;}
+.mob-hdr{display:none;align-items:center;gap:9px;margin-bottom:28px;}
+.mob-logo-txt{font-family:'Poppins',sans-serif;font-size:19px;font-weight:900;color:var(--teal);letter-spacing:2px;}
+/* STEP */
+.step{display:none;}
+.step.on{display:block;}
+.stitle{font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:var(--navy);margin-bottom:5px;}
+.ssub{font-size:13.5px;color:var(--muted);margin-bottom:28px;line-height:1.6;}
+/* FORM */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fg.full{grid-template-columns:1fr;}
+.ig{margin-bottom:14px;}
+.il{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.il .req{color:var(--red);}
+.il .opt{font-size:10.5px;color:var(--muted);font-weight:600;background:var(--bg);padding:1px 6px;border-radius:20px;border:1px solid var(--border);}
+.inp{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:13.5px;font-family:'Nunito',sans-serif;color:var(--navy);outline:none;background:var(--bg);transition:all .2s;}
+.inp:focus{border-color:var(--teal);background:white;box-shadow:0 0 0 3px rgba(10,74,74,0.05);}
+select.inp{appearance:none;cursor:pointer;}
+.inp-wrap{position:relative;}
+.inp-ico{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:15px;cursor:pointer;color:var(--muted);}
+/* EMAIL VERIFY */
+.email-wrap{display:flex;gap:8px;align-items:flex-start;}
+.email-wrap .inp{flex:1;}
+.verify-btn{padding:11px 14px;background:var(--teal3);color:var(--teal);border:1.5px solid rgba(10,74,74,0.15);border-radius:10px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.verify-btn:hover{background:var(--teal);color:white;}
+.verify-btn.verified{background:var(--green-lt);color:var(--green);border-color:rgba(6,95,70,0.2);cursor:default;}
+/* PHOTO UPLOAD */
+.photo-up{border:2px dashed rgba(10,74,74,0.18);border-radius:12px;padding:22px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);}
+.photo-up:hover{border-color:var(--teal);background:var(--teal3);}
+.photo-up.has-photo{border-color:var(--green);background:var(--green-lt);}
+.pu-ico{font-size:32px;margin-bottom:8px;}
+.pu-txt{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.pu-sub{font-size:11.5px;color:var(--muted);}
+/* SERVICES */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.svc-card{border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;text-align:center;background:var(--bg);}
+.svc-card:hover{border-color:var(--teal);}
+.svc-card.on{border-color:var(--teal);background:var(--teal3);}
+.svc-ico{font-size:28px;margin-bottom:8px;}
+.svc-nm{font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;color:var(--navy);}
+/* SERVICE DETAIL FORM */
+.svc-form{background:var(--bg);border-radius:12px;padding:16px;border:1.5px solid var(--border);margin-bottom:14px;display:none;}
+.svc-form.show{display:block;}
+.svc-form-hdr{font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+/* PLAN */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.plan-card{border:2px solid var(--border);border-radius:14px;padding:18px 14px;cursor:pointer;transition:all .3s;position:relative;background:var(--bg);}
+.plan-card:hover{border-color:var(--teal);}
+.plan-card.featured{border-color:var(--saffron);background:var(--saffron-lt);}
+.plan-pop{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--saffron);color:var(--teal);font-size:9.5px;font-weight:800;padding:3px 10px;border-radius:20px;white-space:nowrap;font-family:'Poppins',sans-serif;}
+.plan-ico{font-size:22px;margin-bottom:8px;}
+.plan-nm{font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.plan-pr{font-family:'Poppins',sans-serif;font-size:20px;font-weight:900;color:var(--navy);margin-bottom:10px;}
+.plan-pr span{font-size:11px;color:var(--muted);font-weight:600;}
+.plan-feats{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.pf{font-size:11px;color:var(--body);display:flex;align-items:center;gap:5px;}
+.pfy{color:var(--green);font-weight:700;}
+.pfn{color:#D1D5DB;}
+.plan-btn{width:100%;padding:9px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;border:none;transition:all .2s;}
+.pbf{background:var(--bg);color:var(--muted);border:1.5px solid var(--border);}
+.pbs{background:var(--teal);color:var(--saffron);}
+.pbg{background:linear-gradient(135deg,var(--saffron2),var(--saffron));color:white;}
+/* VERIFY STEPS */
+.vstep{background:var(--bg);border-radius:12px;padding:16px;border:1.5px solid var(--border);margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.vs-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.vs-ico.pend{background:var(--saffron-lt);}
+.vs-ico.done{background:var(--green-lt);}
+.vs-info{flex:1;}
+.vs-title{font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.vs-sub{font-size:11.5px;color:var(--muted);}
+.vs-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.vsb-p{background:var(--saffron-lt);color:var(--saffron2);}
+.vsb-d{background:var(--green-lt);color:var(--green);}
+/* OTP */
+.otp-row{display:flex;gap:8px;margin-bottom:14px;}
+.otp-box{flex:1;height:48px;border:1.5px solid var(--border);border-radius:9px;text-align:center;font-size:18px;font-weight:800;font-family:'Poppins',sans-serif;color:var(--navy);outline:none;background:var(--bg);transition:all .2s;}
+.otp-box:focus{border-color:var(--teal);background:white;}
+.resend-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.resend-lbl{font-size:13px;color:var(--muted);}
+.resend-timer{font-size:13px;font-weight:700;color:var(--teal);}
+/* SELFIE */
+.selfie-area{border:2px dashed rgba(10,74,74,0.2);border-radius:14px;padding:28px;text-align:center;background:var(--bg);margin-bottom:16px;}
+.selfie-preview{display:none;width:120px;height:120px;border-radius:50%;object-fit:cover;margin:0 auto 12px;border:3px solid var(--green);}
+/* REVIEW */
+.review-box{text-align:center;padding:24px 0;}
+.rb-ico{font-size:60px;margin-bottom:16px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.rb-title{font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.rb-sub{font-size:13.5px;color:var(--muted);line-height:1.8;margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto;}
+.rb-steps{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--bg);border-radius:12px;padding:16px;border:1.5px solid var(--border);margin-bottom:20px;}
+.rbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--body);}
+.rbs::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0;}
+/* ALREADY REGISTERED */
+.already-box{background:var(--saffron-lt);border:1.5px solid rgba(245,158,11,0.25);border-radius:12px;padding:16px;margin-bottom:16px;display:none;}
+.already-box.show{display:block;}
+.already-txt{font-size:13px;color:var(--saffron2);font-weight:700;margin-bottom:8px;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:500;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:18px;width:100%;max-width:380px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.modal-title{font-family:'Poppins',sans-serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+/* BUTTONS */
+.btnp{width:100%;padding:13px;background:var(--teal);color:var(--saffron);border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;margin-bottom:10px;}
+.btnp:hover{background:#083838;}
+.btns{width:100%;padding:12px;background:var(--bg);color:var(--teal);border:1.5px solid var(--border);border-radius:12px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.btns:hover{border-color:var(--teal);background:var(--teal3);}
+.back{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;margin-bottom:22px;padding:0;}
+.back:hover{color:var(--navy);}
+.err{background:var(--red-lt);border:1px solid rgba(220,38,38,0.15);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--red);font-weight:600;margin-bottom:14px;display:none;}
+.err.on{display:block;}
+.login-row{text-align:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);font-size:13.5px;color:var(--muted);}
+.login-lnk{color:var(--teal);font-weight:700;text-decoration:none;}
+@media(max-width:900px){.page{grid-template-columns:1fr;}.left{display:none;}.right{padding:28px 20px;}.mob-hdr{display:flex;}.fg{grid-template-columns:1fr;}.plan-grid{grid-template-columns:1fr;}.svc-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.svc-grid{grid-template-columns:1fr 1fr;}.right{padding:20px 14px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- LEFT -->
+<div class="left">
+  <div class="left-dots"></div>
+  <div class="lc">
+    <a class="logo" href="YVITY_Landing_Final.html">
+      <svg width="24" height="24" viewBox="0 0 80 80" fill="none"><path d="M40 6L72 24V46L40 74L8 46V24L40 6Z" stroke="white" stroke-width="3.5" fill="none" stroke-linejoin="round"/><path d="M26 30L40 54L54 30" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 8L48 18L40 28L32 18Z" fill="white" opacity="0.85"/></svg>
+      <span class="logo-txt">YVITY</span>
+    </a>
+    <div class="left-title">Build Your<br><span>Credibility</span><br>Profile</div>
+    <p class="left-sub" id="left-sub">Join 500+ verified advisors on India's first credibility platform.</p>
+    <div class="prog" id="prog-adv">
+      <div class="pi active" id="pa1"><div class="pd">1</div><div><div class="pt">Verify Mobile</div><div class="ps">OTP verification</div></div></div>
+      <div class="pi" id="pa2"><div class="pd">2</div><div><div class="pt">Basic Info</div><div class="ps">Name, location, photo</div></div></div>
+      <div class="pi" id="pa3"><div class="pd">3</div><div><div class="pt">Services & IRDAI</div><div class="ps">Professional details</div></div></div>
+      <div class="pi" id="pa4"><div class="pd">4</div><div><div class="pt">Choose Plan</div><div class="ps">Free, Silver or Gold</div></div></div>
+      <div class="pi" id="pa5"><div class="pd">5</div><div><div class="pt">Verification</div><div class="ps">Email + Selfie</div></div></div>
+    </div>
+    <div class="prog" id="prog-cust" style="display:none;">
+      <div class="pi active" id="pc1"><div class="pd">1</div><div><div class="pt">Verify Mobile</div><div class="ps">OTP verification</div></div></div>
+      <div class="pi" id="pc2"><div class="pd">2</div><div><div class="pt">Your Details</div><div class="ps">Name, city, profession</div></div></div>
+      <div class="pi" id="pc3"><div class="pd">3</div><div><div class="pt">Done!</div><div class="ps">Access your dashboard</div></div></div>
+    </div>
+  </div>
+  <div class="lb"><div class="tagline">Credibility That Matters.</div></div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="mob-hdr">
+    <svg width="20" height="20" viewBox="0 0 80 80" fill="none"><path d="M40 6L72 24V46L40 74L8 46V24L40 6Z" stroke="#0A4A4A" stroke-width="3.5" fill="none" stroke-linejoin="round"/><path d="M26 30L40 54L54 30" stroke="#0A4A4A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 8L48 18L40 28L32 18Z" fill="#0A4A4A" opacity="0.85"/></svg>
+    <span class="mob-logo-txt">YVITY</span>
+  </div>
+
+  <!-- S1: Mobile OTP Send -->
+  <div class="step on" id="s1">
+    <div class="stitle" id="s1-title">Create Your Profile</div>
+    <p class="ssub" id="s1-sub">Enter your mobile number to get started.</p>
+    <div class="already-box" id="already-box">
+      <div class="already-txt">⚠️ Already registered!</div>
+      <div style="font-size:12.5px;color:#92400E;margin-bottom:10px;">This mobile number is already registered.</div>
+      <button class="btnp" style="margin-bottom:0;" onclick="window.location.href='yvity-login.html'">Login Instead</button>
+    </div>
+    <div class="err" id="e1"></div>
+    <div class="ig">
+      <label class="il">Mobile Number <span class="req">*</span></label>
+      <input class="inp" id="i1" type="tel" maxlength="10" placeholder="10-digit mobile number" oninput="checkAlreadyReg(this.value)">
+    </div>
+    <div class="ig">
+      <label class="il">Create Password <span class="req">*</span></label>
+      <div class="inp-wrap">
+        <input class="inp" id="pwd1" type="password" placeholder="Min 8 characters">
+        <span class="inp-ico" onclick="tpwd('pwd1',this)">👁️</span>
+      </div>
+    </div>
+    <button class="btnp" onclick="sendOTP()">Send OTP</button>
+    <div class="login-row">Already have an account? <a class="login-lnk" href="yvity-login.html">Login here</a></div>
+  </div>
+
+  <!-- S2: OTP Verify -->
+  <div class="step" id="s2">
+    <button class="back" onclick="gs('s1',1)">← Back</button>
+    <div class="stitle">Verify OTP</div>
+    <p class="ssub" id="s2-sub">OTP sent to your mobile</p>
+    <div class="err" id="e2"></div>
+    <div class="otp-row">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,0,'s2')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,1,'s2')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,2,'s2')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,3,'s2')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,4,'s2')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,5,'s2')">
+    </div>
+    <div class="resend-row"><span class="resend-lbl">Didn't receive OTP?</span><span class="resend-timer" id="t1">Resend in 30s</span></div>
+    <button class="btnp" onclick="verOTP('s2','e2')">Verify & Continue</button>
+  </div>
+
+  <!-- ===== ADVISOR STEPS ===== -->
+
+  <!-- SA3: Basic Info -->
+  <div class="step" id="sa3">
+    <button class="back" onclick="gs('s2',1)">← Back</button>
+    <div class="stitle">Basic Information</div>
+    <p class="ssub">Tell us about yourself.</p>
+    <div class="fg">
+      <div class="ig"><label class="il">Full Name <span class="req">*</span></label><input class="inp" type="text" placeholder="Your full name"></div>
+      <div class="ig">
+        <label class="il">Email ID <span class="req">*</span></label>
+        <div class="email-wrap">
+          <input class="inp" id="adv-email" type="email" placeholder="you@email.com">
+          <button class="verify-btn" id="email-ver-btn" onclick="openEmailOTP()">Verify</button>
+        </div>
+      </div>
+      <div class="ig"><label class="il">Gender <span class="req">*</span></label><select class="inp"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+      <div class="ig"><label class="il">Date of Birth <span class="req">*</span></label><input class="inp" type="date"></div>
+      <div class="ig"><label class="il">City <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. Nellore"></div>
+      <div class="ig"><label class="il">State <span class="req">*</span></label><select class="inp"><option value="">Select State</option><option>Andhra Pradesh</option><option>Telangana</option><option>Tamil Nadu</option><option>Karnataka</option><option>Maharashtra</option><option>Delhi</option><option>Other</option></select></div>
+    </div>
+    <div class="ig">
+      <label class="il">Profile Photo <span class="opt">Optional</span></label>
+      <div class="photo-up" id="photo-up-adv" onclick="triggerPhoto('photo-adv','photo-up-adv','photo-preview-adv')">
+        <img class="selfie-preview" id="photo-preview-adv">
+        <div class="pu-ico" id="pu-ico-adv">📷</div>
+        <div class="pu-txt">Upload Photo or Take Selfie</div>
+        <div class="pu-sub">Gallery or Camera · JPG/PNG · Max 5MB</div>
+      </div>
+      <input type="file" id="photo-adv" accept="image/*" style="display:none" onchange="previewPhoto(this,'photo-preview-adv','photo-up-adv','pu-ico-adv')">
+    </div>
+    <button class="btnp" onclick="gs('sa4',3)">Continue</button>
+  </div>
+
+  <!-- SA4: Services -->
+  <div class="step" id="sa4">
+    <button class="back" onclick="gs('sa3',2)">← Back</button>
+    <div class="stitle">Services & Professional Info</div>
+    <p class="ssub">Select your services and fill in the details.</p>
+    <div style="font-family:'Poppins',sans-serif;font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:10px;">Select Services <span style="color:var(--red)">*</span></div>
+    <div class="svc-grid">
+      <div class="svc-card" id="sc-life" onclick="togSvc('life')">
+        <div class="svc-ico">🛡️</div>
+        <div class="svc-nm">Life Insurance</div>
+      </div>
+      <div class="svc-card" id="sc-health" onclick="togSvc('health')">
+        <div class="svc-ico">💊</div>
+        <div class="svc-nm">Health Insurance</div>
+      </div>
+    </div>
+    <!-- Life Form -->
+    <div class="svc-form" id="sf-life">
+      <div class="svc-form-hdr">🛡️ Life Insurance Details</div>
+      <div class="fg">
+        <div class="ig"><label class="il">Company <span class="req">*</span></label><select class="inp"><option value="">Select Company</option><option>LIC of India</option><option>HDFC Life</option><option>SBI Life</option><option>ICICI Prudential</option><option>Max Life</option><option>Bajaj Allianz Life</option><option>Tata AIA</option><option>Other</option></select></div>
+        <div class="ig"><label class="il">Designation <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. Senior Advisor"></div>
+        <div class="ig"><label class="il">IRDAI License No. <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. LIC-AP-2010-12345"></div>
+        <div class="ig"><label class="il">Experience <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. 14 years"></div>
+      </div>
+    </div>
+    <!-- Health Form -->
+    <div class="svc-form" id="sf-health">
+      <div class="svc-form-hdr">💊 Health Insurance Details</div>
+      <div class="fg">
+        <div class="ig"><label class="il">Company <span class="req">*</span></label><select class="inp"><option value="">Select Company</option><option>Star Health</option><option>Niva Bupa</option><option>HDFC ERGO</option><option>Care Health</option><option>Aditya Birla Health</option><option>ManipalCigna</option><option>Other</option></select></div>
+        <div class="ig"><label class="il">Designation <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. Health Advisor"></div>
+        <div class="ig"><label class="il">IRDAI License No. <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. SH-AP-2015-67890"></div>
+        <div class="ig"><label class="il">Experience <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. 6 years"></div>
+      </div>
+    </div>
+    <button class="btnp" onclick="gs('sa5',4)">Continue</button>
+  </div>
+
+  <!-- SA5: Plan Selection -->
+  <div class="step" id="sa5">
+    <div class="stitle">🎉 Almost Done!</div>
+    <p class="ssub">Choose a plan to unlock your profile features.</p>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-ico">🆓</div>
+        <div class="plan-nm">Free</div>
+        <div class="plan-pr">₹0 <span>/year</span></div>
+        <div class="plan-feats">
+          <div class="pf"><span class="pfy">✓</span>Basic Profile</div>
+          <div class="pf"><span class="pfy">✓</span>5 Testimonials</div>
+          <div class="pf"><span class="pfn">✕</span>Verified Badge</div>
+          <div class="pf"><span class="pfn">✕</span>Audio/Video</div>
+          <div class="pf"><span class="pfn">✕</span>QR Code</div>
+        </div>
+        <button class="plan-btn pbf" onclick="window.location.href='yvity-advisor-dashboard.html'">Continue Free</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-ico">🥈</div>
+        <div class="plan-nm">Silver</div>
+        <div class="plan-pr">₹999 <span>/year</span></div>
+        <div class="plan-feats">
+          <div class="pf"><span class="pfy">✓</span>Full Profile</div>
+          <div class="pf"><span class="pfy">✓</span>Verified Badge</div>
+          <div class="pf"><span class="pfy">✓</span>Audio Reviews</div>
+          <div class="pf"><span class="pfn">✕</span>Video Reviews</div>
+          <div class="pf"><span class="pfn">✕</span>QR Code</div>
+        </div>
+        <button class="plan-btn pbs" onclick="selPlan('silver')">Get Silver</button>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-pop">⭐ Most Popular</div>
+        <div class="plan-ico">👑</div>
+        <div class="plan-nm">Gold</div>
+        <div class="plan-pr">₹2,999 <span>/year</span></div>
+        <div class="plan-feats">
+          <div class="pf"><span class="pfy">✓</span>Everything in Silver</div>
+          <div class="pf"><span class="pfy">✓</span>Video Reviews</div>
+          <div class="pf"><span class="pfy">✓</span>QR Code</div>
+          <div class="pf"><span class="pfy">✓</span>Founding Badge</div>
+          <div class="pf"><span class="pfy">✓</span>Recommendations</div>
+        </div>
+        <button class="plan-btn pbg" onclick="selPlan('gold')">Get Gold</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SA6: Email OTP (Silver/Gold) -->
+  <div class="step" id="sa6">
+    <div class="stitle">Email Verification</div>
+    <p class="ssub">Verify your email address to continue.</p>
+    <div class="vstep">
+      <div class="vs-ico done">✅</div>
+      <div class="vs-info"><div class="vs-title">Mobile Verified</div><div class="vs-sub">Your mobile number is verified</div></div>
+      <span class="vs-badge vsb-d">Done</span>
+    </div>
+    <div class="vstep">
+      <div class="vs-ico pend">📧</div>
+      <div class="vs-info"><div class="vs-title">Email OTP</div><div class="vs-sub" id="email-otp-sub">Enter OTP sent to your email</div></div>
+      <span class="vs-badge vsb-p">Pending</span>
+    </div>
+    <div class="err" id="e6"></div>
+    <div class="otp-row">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,0,'sa6')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,1,'sa6')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,2,'sa6')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,3,'sa6')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,4,'sa6')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,5,'sa6')">
+    </div>
+    <div class="resend-row"><span class="resend-lbl">Didn't receive OTP?</span><span class="resend-timer" id="t2">Resend in 30s</span></div>
+    <button class="btnp" onclick="gs('sa7',5)">Verify Email</button>
+  </div>
+
+  <!-- SA7: Selfie/Liveness -->
+  <div class="step" id="sa7">
+    <div class="stitle">Selfie Verification</div>
+    <p class="ssub">Take a clear selfie for identity verification.</p>
+    <div class="vstep"><div class="vs-ico done">✅</div><div class="vs-info"><div class="vs-title">Mobile + Email Verified</div><div class="vs-sub">Both verified successfully</div></div><span class="vs-badge vsb-d">Done</span></div>
+    <div class="vstep"><div class="vs-ico pend">🤳</div><div class="vs-info"><div class="vs-title">Liveness Check + Selfie</div><div class="vs-sub">Take a selfie in good lighting</div></div><span class="vs-badge vsb-p" id="selfie-status">Pending</span></div>
+    <div class="selfie-area" id="selfie-area">
+      <img class="selfie-preview" id="selfie-preview">
+      <div id="selfie-placeholder">
+        <div style="font-size:48px;margin-bottom:10px;">🤳</div>
+        <div style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;">Take Selfie</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Use front camera · Good lighting · No sunglasses</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="openCamera()" style="padding:9px 18px;background:var(--teal);color:var(--saffron);border:none;border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;">📷 Open Camera</button>
+          <button onclick="document.getElementById('selfie-file').click()" style="padding:9px 18px;background:var(--bg);color:var(--teal);border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;">🖼️ Upload Photo</button>
+        </div>
+      </div>
+    </div>
+    <input type="file" id="selfie-file" accept="image/*" capture="user" style="display:none" onchange="previewSelfie(this)">
+    <video id="camera-video" style="display:none;width:100%;border-radius:12px;margin-bottom:12px;" autoplay></video>
+    <div id="camera-btns" style="display:none;gap:10px;margin-bottom:16px;justify-content:center;">
+      <button onclick="captureSelfie()" style="padding:10px 22px;background:var(--teal);color:var(--saffron);border:none;border-radius:9px;font-size:13.5px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;">📸 Capture</button>
+      <button onclick="stopCamera()" style="padding:10px 18px;background:var(--red-lt);color:var(--red);border:1.5px solid rgba(220,38,38,0.2);border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">✕ Cancel</button>
+    </div>
+    <button class="btnp" id="submit-selfie-btn" onclick="gs('sa8',5)" style="display:none;">Submit for Review</button>
+    <canvas id="camera-canvas" style="display:none;"></canvas>
+  </div>
+
+  <!-- SA8: Under Review -->
+  <div class="step" id="sa8">
+    <div class="review-box">
+      <div class="rb-ico">⏳</div>
+      <div class="rb-title">Profile Under Review</div>
+      <p class="rb-sub">Your profile has been submitted. Our team is verifying your IRDAI license and identity.</p>
+      <div class="rb-steps">
+        <div class="rbs">Mobile number verified</div>
+        <div class="rbs">Email OTP verified</div>
+        <div class="rbs">Selfie submitted</div>
+        <div class="rbs">IRDAI license under review (24–48 hrs)</div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:18px;">You'll receive an email when your <strong>Verified Badge</strong> is activated.</p>
+      <button class="btnp" onclick="window.location.href='yvity-advisor-dashboard.html'">Go to Dashboard</button>
+    </div>
+  </div>
+
+  <!-- ===== CUSTOMER STEPS ===== -->
+
+  <!-- SC3: Customer Details -->
+  <div class="step" id="sc3">
+    <button class="back" onclick="gs('s2',1)">← Back</button>
+    <div class="stitle">Your Details</div>
+    <p class="ssub">Just a few details to complete your account.</p>
+    <div class="fg">
+      <div class="ig"><label class="il">Full Name <span class="req">*</span></label><input class="inp" type="text" placeholder="Your full name"></div>
+      <div class="ig"><label class="il">Email ID <span class="req">*</span></label><input class="inp" type="email" placeholder="you@email.com"></div>
+      <div class="ig"><label class="il">Gender <span class="req">*</span></label><select class="inp"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+      <div class="ig"><label class="il">Date of Birth <span class="req">*</span></label><input class="inp" type="date"></div>
+      <div class="ig"><label class="il">City <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. Hyderabad"></div>
+      <div class="ig"><label class="il">Profession <span class="req">*</span></label><input class="inp" type="text" placeholder="e.g. Software Engineer"></div>
+    </div>
+    <div class="ig">
+      <label class="il">Profile Photo <span class="opt">Optional</span></label>
+      <div class="photo-up" id="photo-up-cust" onclick="triggerPhoto('photo-cust','photo-up-cust','photo-preview-cust')">
+        <img class="selfie-preview" id="photo-preview-cust">
+        <div class="pu-ico" id="pu-ico-cust">📷</div>
+        <div class="pu-txt">Upload Photo or Take Selfie</div>
+        <div class="pu-sub">Gallery or Camera · JPG/PNG · Max 5MB</div>
+      </div>
+      <input type="file" id="photo-cust" accept="image/*" style="display:none" onchange="previewPhoto(this,'photo-preview-cust','photo-up-cust','pu-ico-cust')">
+    </div>
+    <button class="btnp" onclick="saveCustomerAndGo()">Create Account</button>
+  </div>
+
+</div><!-- end right -->
+</div><!-- end page -->
+
+<!-- Email OTP Modal -->
+<div class="modal-overlay" id="email-modal">
+  <div class="modal">
+    <div class="modal-title">📧 Verify Email</div>
+    <p class="modal-sub" id="email-modal-sub">OTP sent to your email address</p>
+    <div class="otp-row">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,0,'email-modal')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,1,'email-modal')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,2,'email-modal')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,3,'email-modal')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,4,'email-modal')">
+      <input class="otp-box" maxlength="1" oninput="oNext(this,5,'email-modal')">
+    </div>
+    <div class="resend-row"><span class="resend-lbl">Didn't receive?</span><span class="resend-timer" id="t3">Resend in 30s</span></div>
+    <button class="btnp" style="margin-bottom:8px;" onclick="verifyEmailOTP()">Verify Email</button>
+    <button class="btns" onclick="document.getElementById('email-modal').classList.remove('open')">Cancel</button>
+  </div>
+</div>
+
+<script>
+var cur='s1';
+var role='advisor';
+var selPlanName='';
+var camStream=null;
+
+// Read role from URL
+(function(){
+  var p=new URLSearchParams(window.location.search);
+  role=p.get('role')||'advisor';
+  if(role==='customer'){
+    document.getElementById('prog-adv').style.display='none';
+    document.getElementById('prog-cust').style.display='flex';
+    document.getElementById('s1-title').innerText='Create Customer Account';
+    document.getElementById('s1-sub').innerText='Enter your mobile number to get started.';
+    document.getElementById('left-sub').innerText='Find trusted, verified insurance advisors near you.';
+  }
+})();
+
+// Demo registered numbers (localStorage)
+var DEMO_REG=['9876543210','advisor@demo.com'];
+
+function checkAlreadyReg(val){
+  var ab=document.getElementById('already-box');
+  if(DEMO_REG.includes(val.trim())){ab.classList.add('show');}
+  else{ab.classList.remove('show');}
+}
+
+function gs(id,prog){
+  document.getElementById(cur).classList.remove('on');
+  document.getElementById(id).classList.add('on');
+  cur=id;
+  if(prog)updProg(prog);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updProg(n){
+  var prefix=role==='advisor'?'pa':'pc';
+  var max=role==='advisor'?5:3;
+  for(var i=1;i<=max;i++){
+    var el=document.getElementById(prefix+i);
+    if(!el)continue;
+    el.classList.remove('active','done');
+    if(i<n)el.classList.add('done');
+    else if(i===n)el.classList.add('active');
+  }
+}
+
+function showErr(id,msg){var e=document.getElementById(id);if(!e)return;e.innerText=msg;e.classList.add('on');setTimeout(function(){e.classList.remove('on');},4000);}
+
+function sendOTP(){
+  var mob=document.getElementById('i1').value.trim();
+  var pwd=document.getElementById('pwd1').value;
+  if(mob.length<10){showErr('e1','Please enter valid 10-digit mobile number');return;}
+  if(pwd.length<8){showErr('e1','Password must be at least 8 characters');return;}
+  if(DEMO_REG.includes(mob)){showErr('e1','This mobile is already registered. Please login.');return;}
+  document.getElementById('s2-sub').innerText='OTP sent to +91 '+mob;
+  gs('s2',1);
+  startTimer('t1');
+}
+
+function verOTP(sid,eid){
+  var boxes=document.querySelectorAll('#'+sid+' .otp-box');
+  var otp='';boxes.forEach(function(b){otp+=b.value;});
+  if(otp.length<6){showErr(eid,'Please enter complete 6-digit OTP');return;}
+  // After OTP — route based on role
+  if(role==='advisor'){gs('sa3',2);}
+  else{gs('sc3',2);}
+}
+
+function togSvc(type){
+  var card=document.getElementById('sc-'+type);
+  var form=document.getElementById('sf-'+type);
+  card.classList.toggle('on');
+  form.classList.toggle('show',card.classList.contains('on'));
+}
+
+function selPlan(plan){
+  selPlanName=plan;
+  var email=document.getElementById('adv-email').value.trim();
+  document.getElementById('email-otp-sub').innerText='OTP sent to '+email;
+  gs('sa6',5);
+  startTimer('t2');
+}
+
+function openEmailOTP(){
+  var email=document.getElementById('adv-email').value.trim();
+  if(!email){return;}
+  document.getElementById('email-modal-sub').innerText='OTP sent to '+email;
+  document.getElementById('email-modal').classList.add('open');
+  startTimer('t3');
+}
+
+function verifyEmailOTP(){
+  var boxes=document.querySelectorAll('#email-modal .otp-box');
+  var otp='';boxes.forEach(function(b){otp+=b.value;});
+  if(otp.length<6){return;}
+  document.getElementById('email-modal').classList.remove('open');
+  var btn=document.getElementById('email-ver-btn');
+  btn.innerText='✓ Verified';
+  btn.classList.add('verified');
+}
+
+// Camera for Selfie
+function openCamera(){
+  var video=document.getElementById('camera-video');
+  var btns=document.getElementById('camera-btns');
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(function(stream){
+    camStream=stream;
+    video.srcObject=stream;
+    video.style.display='block';
+    btns.style.display='flex';
+    document.getElementById('selfie-placeholder').style.display='none';
+  }).catch(function(){
+    // Fallback to file upload
+    document.getElementById('selfie-file').click();
+  });
+}
+
+function captureSelfie(){
+  var video=document.getElementById('camera-video');
+  var canvas=document.getElementById('camera-canvas');
+  canvas.width=video.videoWidth;
+  canvas.height=video.videoHeight;
+  canvas.getContext('2d').drawImage(video,0,0);
+  var dataURL=canvas.toDataURL('image/jpeg');
+  showSelfiePreview(dataURL);
+  stopCamera();
+}
+
+function stopCamera(){
+  if(camStream){camStream.getTracks().forEach(function(t){t.stop();});camStream=null;}
+  document.getElementById('camera-video').style.display='none';
+  document.getElementById('camera-btns').style.display='none';
+  document.getElementById('selfie-placeholder').style.display='block';
+}
+
+function previewSelfie(input){
+  if(input.files&&input.files[0]){
+    var reader=new FileReader();
+    reader.onload=function(e){showSelfiePreview(e.target.result);};
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function showSelfiePreview(src){
+  var preview=document.getElementById('selfie-preview');
+  preview.src=src;
+  preview.style.display='block';
+  document.getElementById('selfie-placeholder').style.display='none';
+  document.getElementById('selfie-status').innerText='✓ Captured';
+  document.getElementById('selfie-status').className='vs-badge vsb-d';
+  document.getElementById('submit-selfie-btn').style.display='block';
+}
+
+// Photo upload for basic info
+function triggerPhoto(inputId,wrapId,previewId){
+  document.getElementById(inputId).click();
+}
+
+function previewPhoto(input,previewId,wrapId,icoId){
+  if(input.files&&input.files[0]){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var preview=document.getElementById(previewId);
+      preview.src=e.target.result;
+      preview.style.display='block';
+      document.getElementById(icoId).style.display='none';
+      document.getElementById(wrapId).classList.add('has-photo');
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function saveCustomerAndGo(){
+  // Save to localStorage (demo)
+  localStorage.setItem('yvity_user',JSON.stringify({role:'customer',registered:true}));
+  window.location.href='yvity-customer-dashboard.html';
+}
+
+function tpwd(id,ico){var i=document.getElementById(id);if(i.type==='password'){i.type='text';ico.innerText='🙈';}else{i.type='password';ico.innerText='👁️';}}
+
+function oNext(el,idx,ctx){
+  var wrap=el.closest('.otp-row')||el.closest('#email-modal');
+  if(!wrap)return;
+  var boxes=wrap.querySelectorAll('.otp-box');
+  if(el.value&&idx<5)boxes[idx+1].focus();
+}
+
+var timers={};
+function startTimer(id){
+  var sec=30;var el=document.getElementById(id);if(!el)return;
+  clearInterval(timers[id]);
+  timers[id]=setInterval(function(){
+    sec--;
+    if(sec<=0){clearInterval(timers[id]);el.innerHTML='<button style="background:none;border:none;color:#0A4A4A;font-size:13px;font-weight:700;cursor:pointer;text-decoration:underline;font-family:Nunito,sans-serif;">Resend OTP</button>';}
+    else{el.innerText='Resend in '+sec+'s';}
+  },1000);
+}
+</script>
+</body>
+</html>
